@@ -1,102 +1,50 @@
 ---
 layout: app/app-layout
 pagename: dashboard
-items: 
-  - title: 12 Myths Uncovered About IT & Software
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg
-    author: Meadow Katheryne
-    category: Software
-    date: 21 SEP 10:45
-    sales: 4958
-  - title: 50% of things doesn't really belongs to you
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/_everaldo/128.jpg
-    author: Alexander Sargssyan
-    category: Software
-    date: 21 SEP 10:45
-    sales: 192
-  - title: Vestibulum tincidunt amet laoreet mauris sit sem aliquam cras maecenas vel aliquam.
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/eduardo_olv/128.jpg
-    author: Angela Blaine
-    category: Software
-    date: 21 SEP 10:45
-    sales: 2143
-  - title: 10 tips of Object Oriented Design
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/why_this/128.jpg
-    author: Marcus Ulupus
-    category: Software
-    date: 21 SEP 10:45
-    sales: 124
-  - title: Sometimes friend tells it is cold
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/w7download/128.jpg
-    author: Grdon Mrdon
-    category: Software
-    date: 21 SEP 10:45
-    sales: 10214
-  - title: New ways of conceptual thinking
-    img: https://s3.amazonaws.com/uifaces/faces/twitter/pankogut/128.jpg
-    author: Tiko Charbaxo
-    category: Software
-    date: 21 SEP 10:45
-    sales: 3217
-tasks:
-  - title: Meeting with embassador
-    done: true
-  - title: Confession
-    done: true
-  - title: Time to start building an ark
-    done: false
-  - title: Beer time with dudes
-    done: false  
-  - title: Meeting new girls
-    done: true
-  - title: Remember damned home address
-    done: false
-  - title: Get home before you got sleep
-    done: false
-  - title: Meeting with embassador
-    done: true
-  - title: Confession
-    done: true
-  - title: Time to start building an ark
-    done: false
-  - title: Beer time with dudes
-    done: false  
-  - title: Meeting new girls
-    done: true
-  - title: Remember damned home address
-    done: false 
----
-<section class="section">
-    <div class="row sameheight-container">
-        <div class="col col-xs-12 col-sm-12 col-md-6 col-xl-5 stats-col">
-            {{> app/dashboard/stats/stats}}
-        </div>
-        <div class="col col-xs-12 col-sm-12 col-md-6 col-xl-7 history-col">
-            {{> app/dashboard/history/history}}
-        </div>
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5">
+        <h1 style="font-size: 24px">
+          <strong>Open Ethereum Pool</strong>
+        </h1>
+        <strong>Min. payout threshold: {{config.PayoutThreshold}}</strong>, Payouts run twice per day.<br/>
+        <span class="label label-success">PROP</span> Stable and profitable pool with regular payouts.
+      </div>
+      <div class="col-md-3 stats">
+        <div><i class="fa fa-users"></i> Miners Online: <span id="poolHashrate">{{format-number stats.model.minersTotal}}</span></div>
+        <div><i class="fa fa-tachometer"></i> Pool Hash Rate: <span id="poolHashrate">{{format-hashrate stats.model.hashrate}}</span></div>
+        <div><i class="fa fa-money"></i> Pool Fee: <span id="poolFee" class="label label-success">{{config.PoolFee}}</span></div>
+        {{#if stats.model.stats.lastBlockFound}}
+        <div><i class="fa fa-clock-o"></i> Last Block Found: <span>{{format-relative (seconds-to-ms stats.model.stats.lastBlockFound)}}</span></div>
+        {{/if}}
+      </div>
+      <div class="col-md-4 stats">
+        <div><i class="fa fa-unlock-alt"></i> Network Difficulty: <span>{{with-metric-prefix stats.difficulty}}</span></div>
+        <div><i class="fa fa-tachometer"></i> Network Hash Rate: <span>{{format-hashrate stats.hashrate}}</span></div>
+        <div><i class="fa fa-bars"></i> Blockchain Height: <span>{{format-number stats.height}}</span></div>
+        <div><i class="fa fa-clock-o"></i> Current Round Variance: <span>{{format-number stats.roundVariance style='percent'}}</span></div>
+      </div>
     </div>
-</section>
+  </div>
+</div>
 
-<section class="section">
-    <div class="row sameheight-container">
-
-        <div class="col-xl-8">
-            {{> app/dashboard/items/items}}
-        </div>
-
-        <div class="col-xl-4">
-             {{> app/dashboard/sales-breakdown/sales-breakdown}}
-        </div>
+<div class="container">
+  <div class="stats">
+    <h4>Your Stats &amp; Payment History</h4>
+    <div class="input-group">
+      {{input value=cachedLogin class="form-control" placeholder="Enter Your Ethereum Address"}}
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" {{action 'lookup' cachedLogin}}>
+          <span style="display: inline;"><i class="fa fa-search"></i> Lookup</span>
+        </button>
+      </span>
     </div>
-</section>
-<section class="section map-tasks">
-    <div class="row sameheight-container">
-        <div class="col-md-8">
-            {{> app/dashboard/sales-by-countries/sales-by-countries}}
-        </div>
-        
-        <div class="col-md-4">
-            {{> app/dashboard/tasks/tasks}}
-        </div>
-    </div>
-</section>
+  </div>
+  <div>
+    <hr/>
+    <h4 class="note note-info text-center">
+      ethminer.exe -F {{config.HttpHost}}:{{config.HttpPort}}/&lt;address&gt;/&lt;worker&gt; -G
+    </h4>
+  </div>
+</div>
